@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+<h:head>
+        <title>#{playerProfile.player.name}</title>
+</h:head>
+<h:body>
+    <h2>Teams #{playerProfile.player.name} plays in:</h2>
+    <ol>
+        <ui:repeat value="#{playerProfile.playersTeams}" var="team">
+            <li>
+                <h:link value="#{team.name}" outcome="players?teamId=#{team.id}" />
+            </li>
+        </ui:repeat>
+    </ol>
+    <br/>
+
+    <h3>#{playerProfile.player.name} stats:</h3>
+    <ul>
+        <ui:repeat value="#{playerProfile.playersTeams}" var="team">
+            <li>
+                <h3>Stats with #{team.name}</h3>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Points</th>
+                        <th>Assists</th>
+                        <th>Rebounds</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{playerProfile.playerGameStatsList}" var="gameStats">
+                        <ui:fragment rendered="#{team.id eq gameStats.game.awayTeam.id or team.id eq gameStats.game.homeTeam.id}">
+                            <tr>
+                                <td>#{gameStats.game.awayTeam.name} vs #{gameStats.game.homeTeam.name}</td>
+                                <td>#{gameStats.points}</td>
+                                <td>#{gameStats.assists}</td>
+                                <td>#{gameStats.rebounds}</td>
+                            </tr>
+                        </ui:fragment>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </li>
+        </ui:repeat>
+    </ul>
+    <h:link outcome="index" value="Back to home page"/>
+</h:body>
+</html>

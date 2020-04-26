@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head/>
+<h:body>
+    <h2>Players playing in #{teamPlayers.team.name} team:</h2>
+    <ol>
+        <ui:repeat value="#{teamPlayers.teamPlayers}" var="player">
+            <li>
+                <h:link value="#{player.name} #{player.jerseyNumber}" outcome="playerDetails?playerId=#{player.id}" />
+            </li>
+        </ui:repeat>
+    </ol>
+    <h:form>
+        <label>Add a player</label>
+        <h:selectOneMenu value="#{teamPlayers.chosenPlayerId}" required="true">
+            <f:selectItems value="#{teamPlayers.allPlayers}" var="player"
+                           itemLabel="#{player.name}" itemValue="#{player.id}"/>
+        </h:selectOneMenu>
+        <h:commandButton value="Add" action="#{teamPlayers.addPlayer}" >
+            <f:param name="teamId" value="#{teamPlayers.team.id}" />
+        </h:commandButton>
+    </h:form>
+    <h:link outcome="teams" value="Back to teams page">
+        <f:param name="leagueId" value="#{teamPlayers.team.leagueId}"/>
+    </h:link>
+
+    <span style="color:red">#{teamPlayers.errorMessage}</span>
+</h:body>
+</html>

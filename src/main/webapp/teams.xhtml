@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head/>
+<h:body>
+    <h1>#{teamsMyBatis.league.name}</h1>
+    <h:dataTable value="#{teamsMyBatis.allTeams}" var="team">
+        <h:column>
+            <f:facet name="header">Name</f:facet>
+            <h:link value="#{team.name}" outcome="players?teamId=#{team.id}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">Wins</f:facet>
+            #{team.wins}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Losses</f:facet>
+            #{team.losses}
+        </h:column>
+    </h:dataTable>
+    <br/>
+    <h:form>
+        <h:inputText value="#{teamsMyBatis.teamToCreate.name}" required="true" />
+        <h:commandButton value="Add new team" action="#{teamsMyBatis.createTeam}" >
+            <f:param name="leagueId" value="#{teamsMyBatis.league.id}" />
+        </h:commandButton>
+    </h:form>
+
+
+    <h3>Insert game data:</h3>
+    <h:form>
+        <h:outputLabel for="hometeam">Home team</h:outputLabel>
+        <h:selectOneMenu id="hometeam" value="#{teamsMyBatis.gameToAdd.teamHome}" required="true">
+            <f:selectItems value="#{teamsMyBatis.allTeams}" var="team"
+                           itemLabel="#{team.name}" itemValue="#{team.id}"/>
+        </h:selectOneMenu>
+        <h:outputLabel for="awayteam">Away team</h:outputLabel>
+        <h:selectOneMenu id="awayteam" value="#{teamsMyBatis.gameToAdd.teamAway}" required="true">
+            <f:selectItems value="#{teamsMyBatis.allTeams}" var="team"
+                           itemLabel="#{team.name}" itemValue="#{team.id}"/>
+        </h:selectOneMenu>
+        <br/>
+        <h:outputLabel for="hometeampoints">Home team points</h:outputLabel>
+        <h:inputText id="hometeampoints" value="#{teamsMyBatis.gameToAdd.hometeampoints}" required="true" />
+        <h:outputLabel for="awayteampoints">Away team points</h:outputLabel>
+        <h:inputText id="awayteampoints" value="#{teamsMyBatis.gameToAdd.awayteampoints}" required="true" />
+        <br/>
+        <h:commandButton value="Add game" action="#{teamsMyBatis.addGame}">
+            <f:param name="leagueId" value="#{teamsMyBatis.league.id}" />
+        </h:commandButton>
+        <h:outputText value="Away and Home team can't be the same team" rendered="#{param['error'] == 'same-team-exception'}" />
+    </h:form>
+    <h:link value="Back to index" outcome="/index"/>
+</h:body>
+</html>

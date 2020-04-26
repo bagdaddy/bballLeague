@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vu.tp.mybatis.dao.TeamPlayerMapper">
+    <resultMap id="PlayerResultMap" type="vu.tp.mybatis.model.Player">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="JERSEY_NUMBER" jdbcType="INTEGER" property="jerseyNumber" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+    </resultMap>
+    <resultMap id="TeamResultMap" type="vu.tp.mybatis.model.Team">
+        <id column="ID" jdbcType="INTEGER" property="id" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+        <result column="LEAGUE_ID" jdbcType="INTEGER" property="leagueId" />
+    </resultMap>
+    <insert id="addTeamPlayer" keyColumn="ID" keyProperty="id">
+        INSERT INTO TEAM_PLAYER (player_id, team_id)
+        VALUES(#{param1, jdbcType=INTEGER}, #{param2, jdbcType=INTEGER})
+    </insert>
+    <delete id="deleteTeamPlayer">
+        DELETE FROM TEAM_PLAYER
+        WHERE player_id = #{playerId}
+        AND team_id = #{teamId}
+    </delete>
+    <select id="selectPlayers" resultMap="PlayerResultMap">
+    SELECT player.ID, player.JERSEY_NUMBER, player.NAME
+    from PUBLIC.Player as player
+    INNER JOIN PUBLIC.TEAM_PLAYER as tp ON tp.player_id = player.id
+    WHERE tp.team_id = #{teamId, jdbcType=INTEGER}
+
+  </select>
+    <select id="selectTeams" resultMap="TeamResultMap">
+        SELECT team.ID, team.NAME, team.LEAGUE_ID
+        from PUBLIC.TEAM as team
+        INNER JOIN PUBLIC.TEAM_PLAYER as tp ON tp.team_id = team.id
+        WHERE tp.player_id = #{playerId, jdbcType=INTEGER}
+    </select>
+</mapper>

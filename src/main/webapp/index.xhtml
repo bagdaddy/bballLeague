@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+<h:head>
+        <title>Leagues</title>
+        <link type="text/css" href="src/all.css"></link>
+</h:head>
+<h:body>
+  <div class="col-6">
+    <h2>Leagues:</h2>
+    <ol>
+      <ui:repeat value="#{leagues.allLeagues}" var="league">
+        <li><h:link value="#{league.name}" outcome="teams?leagueId=#{league.id}" /></li>
+      </ui:repeat>
+    </ol>
+  </div>
+  <div class="col-6">
+    <h2>Players:</h2>
+    <ol>
+      <ui:repeat value="#{leagues.allPlayers}" var="player">
+        <li>#{player.name}</li>
+      </ui:repeat>
+    </ol>
+  </div>
+
+  <h3>Create a new league:</h3>
+  <h:form id="createLeague">
+    <h:inputText value="#{leagues.leagueToCreate.name}" required="true" />
+    <h:commandButton value="Create" action="#{leagues.createLeague}" />
+  </h:form>
+  <br/>
+  <h3>Create a player profile:</h3>
+  <h:form id="createPlayer">
+    <h:inputText value="#{leagues.playerToCreate.name}" required="true" />
+    <h:commandButton value="Create" action="#{leagues.createPlayer}" />
+  </h:form>
+  <h:link value="Back to index" outcome="/index"/>
+</h:body>
+</html>

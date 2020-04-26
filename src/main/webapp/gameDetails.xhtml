@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core"
+>
+<h:head>
+    <title>Game id: #{updateGameStats.game.id}</title>
+</h:head>
+<h:body>
+    <h:form>
+        <div>
+            <h3>#{updateGameStats.game.homeTeam.name} stats:</h3>
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Points</th>
+                        <th>Assists</th>
+                        <th>Rebounds</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{updateGameStats.playerGameStatsList}" var="playerGameStats">
+                            <ui:fragment rendered="#{playerGameStats.team.id eq updateGameStats.game.homeTeam.id}">
+                                <tr>
+                                    <td>#{playerGameStats.player.name}</td>
+                                    <td><h:inputText value="#{playerGameStats.points}" required="true" /></td>
+                                    <td><h:inputText value="#{playerGameStats.assists}" required="true"/></td>
+                                    <td><h:inputText value="#{playerGameStats.rebounds}" required="true"/></td>
+                                </tr>
+                            </ui:fragment>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <h3>#{updateGameStats.game.awayTeam.name} stats:</h3>
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Points</th>
+                        <th>Assists</th>
+                        <th>Rebounds</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <ui:repeat value="#{updateGameStats.playerGameStatsList}" var="playerGameStats">
+                        <ui:fragment rendered="#{playerGameStats.team.id eq updateGameStats.game.awayTeam.id}">
+                            <tr>
+                                <td>#{playerGameStats.player.name}</td>
+                                <td><h:inputText value="#{playerGameStats.points}" required="true" /></td>
+                                <td><h:inputText value="#{playerGameStats.assists}" required="true"/></td>
+                                <td><h:inputText value="#{playerGameStats.rebounds}" required="true"/></td>
+                            </tr>
+                        </ui:fragment>
+                    </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h:commandButton value="Add" action="#{updateGameStats.saveStats}">
+            <f:param name="leagueId" value="#{updateGameStats.game.league.id}" />
+        </h:commandButton>
+    </h:form>
+    <h:link value="Return to league" outcome="/teams">
+        <f:param name="leagueId" value="#{updateGameStats.game.league.id}"/>
+    </h:link>
+</h:body>
+</html>
