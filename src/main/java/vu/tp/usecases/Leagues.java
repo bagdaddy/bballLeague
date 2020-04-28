@@ -6,6 +6,7 @@ import vu.tp.mybatis.dao.LeagueMapper;
 import vu.tp.mybatis.dao.PlayerMapper;
 import vu.tp.mybatis.model.League;
 import vu.tp.mybatis.model.Player;
+import vu.tp.utils.JerseyNumberGenerator;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @Model
 public class Leagues {
+    @Inject
+    private JerseyNumberGenerator jerseyNumberGenerator;
     @Inject
     private LeagueMapper leagueMapper;
 
@@ -52,6 +55,7 @@ public class Leagues {
 
     @Transactional
     public String createPlayer(){
+        playerToCreate.setJerseyNumber(jerseyNumberGenerator.generateJerseyNumber());
         playerMapper.insert(playerToCreate);
         return "/index?faces-redirect=true";
     }
