@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import vu.tp.entities.Game;
 import vu.tp.entities.PlayerGameStats;
-import vu.tp.utils.PlayerStatsGenerator;
+import vu.tp.utils.Generator;
+import vu.tp.utils.RandomPlayerStatsGenerator;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +19,7 @@ import java.util.concurrent.ExecutionException;
 @Named
 public class GeneratePlayerStats implements Serializable {
     @Inject
-    PlayerStatsGenerator playerStatsGenerator;
+    RandomPlayerStatsGenerator generator;
 
     private CompletableFuture<Game> statsGenerationTask = null;
 
@@ -32,7 +31,7 @@ public class GeneratePlayerStats implements Serializable {
     public String generatePlayerStats(Game game){
         outputText = "Stats are being generated. Please wait";
         gameStatsAreGeneratedFor = game;
-        statsGenerationTask = CompletableFuture.supplyAsync(() -> playerStatsGenerator.generateStats(game));
+        statsGenerationTask = CompletableFuture.supplyAsync(() -> generator.generateStats(game));
         statsGenerationTask.thenAccept(this::onGenerationCompleted);
         return "/gameDetails?faces-redirect=true&gameId=" + game.getId();
     }

@@ -84,10 +84,14 @@ public class UpdateGameStats implements Serializable{
         try{
             if(generatePlayerStats.getCurrentGame() != null && generatePlayerStats.getCurrentGame().equals(this.game)){
                 playerGameStatsList = generatePlayerStats.getGeneratedStats();
+                for(PlayerGameStats playerGameStats : playerGameStatsList){
+                    System.out.println(playerGameStats.getPoints());
+                }
             }
         }catch(Exception e){
             playerGameStatsList = null;
         }
+
         if(playerGameStatsList == null ){
             System.out.println("no generated stats");
             playerGameStatsList = game.getPlayerGameStatsList();
@@ -104,6 +108,7 @@ public class UpdateGameStats implements Serializable{
             }
             game.setPlayerGameStatsList(playerGameStatsList);
         }
+
     }
 
     @Transactional
