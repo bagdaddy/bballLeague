@@ -14,11 +14,13 @@ import vu.tp.entities.Player;
 import vu.tp.persistence.TeamsDAO;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Model;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.GeneratedValue;
 import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.io.Serializable;
@@ -33,6 +35,9 @@ public class UpdateGameStats implements Serializable{
 
     @Inject
     private PlayersDAO playersDAO;
+
+    @Inject
+    private GeneratePlayerStats generatePlayerStats;
 
     @Inject
     private TeamsDAO teamsDAO;
@@ -68,6 +73,7 @@ public class UpdateGameStats implements Serializable{
 
     @PostConstruct
     public void init(){
+        System.out.println("INIT");
         Map<String, String> requestParameters =
                 FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer gameId = Integer.parseInt(requestParameters.get("gameId"));
@@ -75,32 +81,42 @@ public class UpdateGameStats implements Serializable{
 
         awayTeam = game.getAwayTeam();
         homeTeam = game.getHomeTeam();
+        try{
+            if(generatePlayerStats.getCurrentGame() != null && generatePlayerStats.getCurrentGame().equals(this.game)){
+                playerGameStatsList = generatePlayerStats.getGeneratedStats();
+            }
+        }catch(Exception e){
+            playerGameStatsList = null;
+        }
+        if(playerGameStatsList == null ){
+            System.out.println("no generated stats");
+            playerGameStatsList = game.getPlayerGameStatsList();
+        }else{
+            playerGameStatsList = new ArrayList<>();
+        }
 
-        playerGameStatsList = game.getPlayerGameStatsList();
         if(playerGameStatsList.size() == 0){
             for(Player player : awayTeam.getPlayers()){
-                System.out.println("Saving player stats for away team " + player.getName());
                 playerGameStatsList.add(persistBlankPlayerGameStats(player, awayTeam));
             }
             for(Player player : homeTeam.getPlayers()){
-                System.out.println("Saving player stats for home team " + player.getName());
                 playerGameStatsList.add(persistBlankPlayerGameStats(player, homeTeam));
             }
             game.setPlayerGameStatsList(playerGameStatsList);
         }
-        System.out.println("New statlines: " + playerGameStatsList.size());
     }
 
     @Transactional
     public String saveStats(){
-        System.out.println("Saving records");
         for(PlayerGameStats playerGameStats : this.playerGameStatsList){
             if(playerGameStats.getId() != null){
-                playerGameStatsDAO.update(playerGameStats);
-                System.out.println("updating");
+                try{
+                    playerGameStatsDAO.update(playerGameStats);
+                }catch(OptimisticLockException e){
+                    return "/gameDetails?faces-redirect=true&gameId=" + this.game.getId() + "&error=optimistic-lock-exception";
+                }
             }else{
                 playerGameStatsDAO.persist(playerGameStats);
-                System.out.println("saving new record");
             }
         }
         return "/gameDetails?faces-redirect=true&gameId=" + this.game.getId();

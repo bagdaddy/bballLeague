@@ -66,10 +66,18 @@
                 </table>
             </div>
         </div>
-        <h:commandButton value="Add" action="#{updateGameStats.saveStats}">
+        <h:outputText id="generationOutputText" value="#{generatePlayerStats.outputText}"/>
+        <h:commandButton value="Generate player stats?" disabled="#{generatePlayerStats.isStatsGenerationRunning()}" action="#{generatePlayerStats.generatePlayerStats(updateGameStats.game)}">
+            <f:param name="gameId" value="#{updateGameStats.game.id}"/>
+        </h:commandButton><br/>
+        <h:commandButton rendered="#{generatePlayerStats.generatedStatsExist(updateGameStats.game)}" value="Clear generated stats" action="#{generatePlayerStats.clearGeneratedStats()}">
+            <f:param name="gameId" value="#{updateGameStats.game.id}"/>
+        </h:commandButton><br/>
+        <h:commandButton value="Save" action="#{updateGameStats.saveStats}">
             <f:param name="leagueId" value="#{updateGameStats.game.league.id}" />
         </h:commandButton>
     </h:form>
+    <h:outputText value="Someone else has updated this games statistics. Please try again." rendered="#{param['error'] == 'error=optimistic-lock-exception'}"/>
     <h:link value="Return to league" outcome="/teams">
         <f:param name="leagueId" value="#{updateGameStats.game.league.id}"/>
     </h:link>

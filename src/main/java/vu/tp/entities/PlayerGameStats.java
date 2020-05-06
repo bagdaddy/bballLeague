@@ -40,6 +40,9 @@ public class PlayerGameStats {
     @Getter @Setter
     private Integer assists;
 
+    @Version
+    private Long version;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
