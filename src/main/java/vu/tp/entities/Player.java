@@ -31,7 +31,7 @@ public class Player implements Serializable {
     private Set<Team> teams = new HashSet<>();
 
     @Getter @Setter
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private List<PlayerGameStats> playerGameStatsList;
 
     public void addPlayerGameStats(PlayerGameStats playerGameStats){

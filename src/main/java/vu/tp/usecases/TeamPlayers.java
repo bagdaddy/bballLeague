@@ -50,7 +50,6 @@ public class TeamPlayers implements Serializable {
     private Team team;
     @PostConstruct
     public void init() {
-        System.out.println("INIT CALLED");
         Map<String, String> requestParameters =
                 FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer teamId = Integer.parseInt(requestParameters.get("teamId"));

@@ -6,7 +6,7 @@ import lombok.Setter;
 import vu.tp.entities.Game;
 import vu.tp.entities.PlayerGameStats;
 import vu.tp.entities.Team;
-import vu.tp.interceptors.LoggedInvocation;
+import vu.tp.interceptors.CustomInterceptor;
 import vu.tp.persistence.GamesDAO;
 import vu.tp.persistence.PlayerGameStatsDAO;
 import vu.tp.persistence.PlayersDAO;
@@ -14,17 +14,13 @@ import vu.tp.entities.Player;
 import vu.tp.persistence.TeamsDAO;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Model;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.GeneratedValue;
 import javax.persistence.OptimisticLockException;
 import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +69,6 @@ public class UpdateGameStats implements Serializable{
 
     @PostConstruct
     public void init(){
-        System.out.println("INIT");
         Map<String, String> requestParameters =
                 FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         Integer gameId = Integer.parseInt(requestParameters.get("gameId"));
@@ -84,9 +79,7 @@ public class UpdateGameStats implements Serializable{
         try{
             if(generatePlayerStats.getCurrentGame() != null && generatePlayerStats.getCurrentGame().equals(this.game)){
                 playerGameStatsList = generatePlayerStats.getGeneratedStats();
-                for(PlayerGameStats playerGameStats : playerGameStatsList){
-                    System.out.println(playerGameStats.getPoints());
-                }
+
             }
         }catch(Exception e){
             playerGameStatsList = null;
@@ -95,8 +88,6 @@ public class UpdateGameStats implements Serializable{
         if(playerGameStatsList == null ){
             System.out.println("no generated stats");
             playerGameStatsList = game.getPlayerGameStatsList();
-        }else{
-            playerGameStatsList = new ArrayList<>();
         }
 
         if(playerGameStatsList.size() == 0){
@@ -108,11 +99,12 @@ public class UpdateGameStats implements Serializable{
             }
             game.setPlayerGameStatsList(playerGameStatsList);
         }
-
     }
 
     @Transactional
+    @CustomInterceptor
     public String saveStats(){
+        generatePlayerStats.clearGeneratedStats(false);
         for(PlayerGameStats playerGameStats : this.playerGameStatsList){
             if(playerGameStats.getId() != null){
                 try{
