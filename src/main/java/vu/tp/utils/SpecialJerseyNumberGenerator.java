@@ -6,6 +6,7 @@ import vu.tp.mybatis.model.Player;
 import vu.tp.mybatis.model.Team;
 import vu.tp.persistence.PlayersDAO;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Specializes;
 import javax.inject.Inject;
@@ -17,6 +18,12 @@ import java.util.Random;
 public class SpecialJerseyNumberGenerator extends JerseyNumberGenerator {
     @Inject
     PlayerMapper playerMapper;
+
+    @PostConstruct
+    public void init(){
+        System.out.println("Special generator created");
+    }
+
     @Override
     public Integer generateJerseyNumber(){
         System.out.println("Special generator");

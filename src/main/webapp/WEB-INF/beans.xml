@@ -8,8 +8,11 @@
 
     <interceptors>
         <class>vu.tp.interceptors.MethodLogger</class>
-        <class>vu.tp.interceptors.BasicInterceptor</class>
+        <class>vu.tp.interceptors.SpecialInterceptor</class>
     </interceptors>
+    <decorators>
+        <class>vu.tp.utils.NumberGeneratorDecorator</class>
+    </decorators>
 <!--    <alternatives>-->
 <!--        <class>vu.tp.utils.RandomPlayerStatsGenerator</class>-->
 <!--    </alternatives>-->

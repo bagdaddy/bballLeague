@@ -2,13 +2,16 @@ package vu.tp.usecases;
 
 import lombok.Getter;
 import lombok.Setter;
+import vu.tp.interceptors.CustomInterceptor;
 import vu.tp.mybatis.dao.LeagueMapper;
 import vu.tp.mybatis.dao.PlayerMapper;
 import vu.tp.mybatis.model.League;
 import vu.tp.mybatis.model.Player;
 import vu.tp.utils.JerseyNumberGenerator;
+import vu.tp.utils.NumberGenerator;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -17,7 +20,8 @@ import java.util.List;
 @Model
 public class Leagues {
     @Inject
-    private JerseyNumberGenerator jerseyNumberGenerator;
+    private NumberGenerator jerseyNumberGenerator;
+
     @Inject
     private LeagueMapper leagueMapper;
 
@@ -48,6 +52,7 @@ public class Leagues {
     private void loadAllPlayers() {this.allPlayers = playerMapper.selectAll();}
 
     @Transactional
+    @CustomInterceptor
     public String createLeague() {
         leagueMapper.insert(leagueToCreate);
         return "/index?faces-redirect=true";
