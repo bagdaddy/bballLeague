@@ -1,5 +1,6 @@
 package vu.tp.persistence;
 
+import vu.tp.entities.League;
 import vu.tp.entities.Team;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -8,26 +9,26 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @ApplicationScoped
-public class TeamsDAO {
+public class LeaguesDAO {
 
     @Inject
     private EntityManager em;
 
-    public List<Team> loadAll() {
-        return em.createNamedQuery("Team.findAll", Team.class).getResultList();
+    public List<League> loadAll() {
+        return em.createNamedQuery("League.findAll", League.class).getResultList();
     }
 
     public void setEm(EntityManager em) {
         this.em = em;
     }
 
-    public Team update(Team team){ return em.merge(team); }
+    public League update(League team){ return em.merge(team); }
 
-    public void persist(Team team){
+    public void persist(League team){
         this.em.persist(team);
     }
 
-    public Team findOne(Integer id) {
-        return em.find(Team.class, id);
+    public League findOne(Integer id) {
+        return em.find(League.class, id);
     }
 }

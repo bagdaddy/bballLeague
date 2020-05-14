@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
@@ -11,7 +12,7 @@ import javax.persistence.*;
         @NamedQuery(name = "PlayerGameStats.findAll", query = "select a from PlayerGameStats as a")
 })
 @Getter @Setter
-public class PlayerGameStats {
+public class PlayerGameStats implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

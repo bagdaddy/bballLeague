@@ -47,6 +47,8 @@ public class Team {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer losses = 0;
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

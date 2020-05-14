@@ -5,7 +5,10 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:f="http://java.sun.com/jsf/core">
-<h:head/>
+<h:head>
+    <h:outputScript library="js" name="jquery.min.js"/>
+    <h:outputScript library="js" name="app.js"/>
+</h:head>
 <h:body>
     <h2>Players playing in #{teamPlayers.team.name} team:</h2>
     <ol>
@@ -25,6 +28,13 @@
             <f:param name="teamId" value="#{teamPlayers.team.id}" />
         </h:commandButton>
     </h:form>
+    <h:form id="updateTeamName">
+        <label>Change Team name</label>
+        <h:inputText id="name" name="name"/>
+        <h:inputHidden value="#{teamPlayers.team.id}" id="id" name="id" readonly="true"/>
+        <h:commandButton id="submit" value="Save"/>
+    </h:form>
+    <h:outputText style="color:red" value="There was an error when updating team name. Please try again later" rendered="#{param['put_error'] == 'true'}"/>
     <h:link outcome="teams" value="Back to teams page">
         <f:param name="leagueId" value="#{teamPlayers.team.leagueId}"/>
     </h:link>
