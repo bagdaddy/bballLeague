@@ -24,6 +24,9 @@ public class Player implements Serializable {
     @Column(name = "NAME")
     private String name;
 
+    @Column(name="JERSEY_NUMBER")
+    private Integer jerseyNumber;
+
     @ManyToMany
     @JoinTable(name="TEAM_PLAYER",
     joinColumns = @JoinColumn(name="player_id"),
