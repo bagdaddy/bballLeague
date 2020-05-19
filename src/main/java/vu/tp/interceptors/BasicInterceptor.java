@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class BasicInterceptor implements Serializable {
     @AroundInvoke
     public Object validateInput(InvocationContext context) throws Exception{
-        System.out.println("Basic interceptor");
         System.out.println(context.toString());
         return context.proceed();
     }

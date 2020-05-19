@@ -3,6 +3,7 @@ package vu.tp.usecases;
 import lombok.Getter;
 import lombok.Setter;
 import vu.tp.entities.PlayerGameStats;
+import vu.tp.interceptors.CustomInterceptor;
 import vu.tp.mybatis.dao.*;
 import vu.tp.mybatis.model.*;
 
@@ -66,6 +67,7 @@ public class TeamsMyBatis {
         this.allTeams = teamMapper.selectAll();
     }
 
+    @CustomInterceptor
     private void loadLeagueTeams(){
         this.allTeams = teamMapper.selectTeamsByLeagueId(league.getId());
     }

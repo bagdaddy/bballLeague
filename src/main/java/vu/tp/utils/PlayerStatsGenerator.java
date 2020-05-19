@@ -63,6 +63,7 @@ public class PlayerStatsGenerator implements Generator, Serializable {
                 awayTeamPlayers.remove(playerStatsFromGame.getPlayer());
             }
             playerStatsFromGame.setPoints(points);
+            System.out.println(playerStatsFromGame.getPlayer().getName() + " " + playerStatsFromGame.getPoints());
             playerStatsFromGame.setRebounds(rebounds);
         }
 
@@ -70,9 +71,11 @@ public class PlayerStatsGenerator implements Generator, Serializable {
         for(PlayerGameStats playerGameStats : playerGameStatsList){
             int assists;
             if(playerGameStats.getGame().getHomeTeam().equals(playerGameStats.getTeam())){
-                assists = new Random().nextInt((int)((homePoints - playerGameStats.getPoints()) / 2.3));
+                int maxAssists = (int)((homePoints - playerGameStats.getPoints()) / 2.3);
+                assists = maxAssists > 0 ? new Random().nextInt(maxAssists) : maxAssists;
             }else{
-                assists = new Random().nextInt((int)((awayPoints - playerGameStats.getPoints()) / 2.3));
+                int maxAssists = (int)((awayPoints - playerGameStats.getPoints()) / 2.3);
+                assists = maxAssists > 0 ? new Random().nextInt(maxAssists) : maxAssists;
             }
             playerGameStats.setAssists(assists);
         }

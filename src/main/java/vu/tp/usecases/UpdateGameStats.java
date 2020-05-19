@@ -86,7 +86,6 @@ public class UpdateGameStats implements Serializable{
         }
 
         if(playerGameStatsList == null ){
-            System.out.println("no generated stats");
             playerGameStatsList = game.getPlayerGameStatsList();
         }
 
