@@ -52,7 +52,7 @@ $( document ).ready(function(){
                 'Content-Type': 'application/json'
             },
             method: "PUT",
-            url: "/bballLeague/resources/api/team/" + json.id,
+            url: "/bballLeague/api/team/" + json.id,
             data: data,
             success: function(response){
                 window.location.href = removeURLParameter(window.location.href, "error");

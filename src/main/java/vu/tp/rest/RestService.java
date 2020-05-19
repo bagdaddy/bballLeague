@@ -16,8 +16,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @ApplicationScoped
-@ApplicationPath("/resources")
-@Path("/api")
+@ApplicationPath("/api")
+@Path("/team")
 public class RestService extends Application {
     @Inject
     TeamsDAO teamsDAO;
@@ -26,7 +26,7 @@ public class RestService extends Application {
     LeaguesDAO leaguesDAO;
 
     @GET
-    @Path("/team/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") final Integer id){
         System.out.println("called team/" + id);
@@ -40,7 +40,7 @@ public class RestService extends Application {
         return Response.ok(teamDto).build();
     }
 
-    @Path("/team/{id}")
+    @Path("/{id}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -55,7 +55,7 @@ public class RestService extends Application {
         return Response.ok().build();
     }
 
-    @Path("/team")
+    @Path("/")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
